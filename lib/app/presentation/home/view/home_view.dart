@@ -27,44 +27,41 @@ class HomeView extends StatelessWidget {
   }
 
   Widget buildBody(BuildContext context) {
-    return Container(
-      child: BlocBuilder<ArticlesCubit, ArticlesState>(builder: (_, state) {
-        if (state is ArticlesInitial || state is ArticlesIsLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is ArticlesIsLoaded) {
-          print(state.articles.length);
-          return ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (_, i) {
-              return GestureDetector(
-                onTap: () {},
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      state.articles[i].urlToImage ??
-                          state.articles[i].author.toString().substring(0, 1),
-                    ),
+    return BlocBuilder<ArticlesCubit, ArticlesState>(builder: (_, state) {
+      if (state is ArticlesInitial || state is ArticlesIsLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (state is ArticlesIsLoaded) {
+        return ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (_, i) {
+            return GestureDetector(
+              onTap: () {},
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    state.articles[i].urlToImage ??
+                        state.articles[i].author.toString().substring(0, 1),
                   ),
-                  title: Text(state.articles[i].title ?? ''),
-                  subtitle: Text(state.articles[i].author ?? ''),
                 ),
-              );
-            },
-            separatorBuilder: (_, i) => const Divider(
-              thickness: 1.4,
-            ),
-            itemCount: state.articles.length,
-          );
-        } else if (state is ArticlesOnError) {
-          return Center(
-            child: Text(state.failure.message),
-          );
-        } else {
-          return Container();
-        }
-      }),
-    );
+                title: Text(state.articles[i].title ?? ''),
+                subtitle: Text(state.articles[i].author ?? ''),
+              ),
+            );
+          },
+          separatorBuilder: (_, i) => const Divider(
+            thickness: 1.4,
+          ),
+          itemCount: state.articles.length,
+        );
+      } else if (state is ArticlesOnError) {
+        return Center(
+          child: Text(state.failure.message),
+        );
+      } else {
+        return Container();
+      }
+    });
   }
 }
