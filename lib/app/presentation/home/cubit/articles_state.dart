@@ -13,12 +13,14 @@ class ArticlesIsLoading extends ArticlesState {}
 
 class ArticlesIsLoaded extends ArticlesState {
   final List<ArticleEntity> articles;
+  final bool isOffline;
 
-  const ArticlesIsLoaded({required this.articles});
+  const ArticlesIsLoaded({required this.articles, required this.isOffline});
 }
 
 class ArticlesOnError extends ArticlesState {
   final Failure failure;
+  final bool isOffline;
 
-  const ArticlesOnError({required this.failure});
+  const ArticlesOnError({required this.failure, required this.isOffline});
 }

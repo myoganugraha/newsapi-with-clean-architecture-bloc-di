@@ -7,7 +7,7 @@ import 'package:sembast/sembast_io.dart';
 
 class ArticlesLocalDatasourceImpl implements ArticlesLocalDatasource {
   final _kDBFileName = 'sembast_articles.db';
-  final _kArticlesStoreName = 'articles_store';
+  static const _kArticlesStoreName = 'articles_store';
 
   late Database _database;
 
@@ -51,6 +51,7 @@ class ArticlesLocalDatasourceImpl implements ArticlesLocalDatasource {
   @override
   Future<List<ArticleModel>> getArticles() async {
     try {
+      await initDb();
       final articlesSnapshot = await _articlesStore.find(_database);
       return articlesSnapshot
           .map((snapshot) => ArticleModel.fromJson(snapshot.value))
@@ -63,6 +64,7 @@ class ArticlesLocalDatasourceImpl implements ArticlesLocalDatasource {
   @override
   Future<bool> insertArticles(List<ArticleModel> articles) async {
     try {
+      await initDb();
       await _articlesStore.delete(_database);
       for (final articleModel in articles) {
         await _articlesStore.add(_database, articleModel.toJson());

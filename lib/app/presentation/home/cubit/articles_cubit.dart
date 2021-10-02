@@ -43,8 +43,8 @@ class ArticlesCubit extends Cubit<ArticlesState> {
       );
     }
     emit(failureOrArticles.fold(
-      (l) => ArticlesOnError(failure: l),
-      (r) => ArticlesIsLoaded(articles: r),
+      (l) => ArticlesOnError(failure: l, isOffline: !connectivity),
+      (r) => ArticlesIsLoaded(articles: r, isOffline: !connectivity),
     ));
   }
 
